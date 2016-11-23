@@ -115,4 +115,4 @@ const BondAPI = {
     }
 };
 
-BondAPI.Account.show();
+module.exports = BondAPI;
