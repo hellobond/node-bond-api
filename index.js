@@ -20,21 +20,22 @@ const BondAPI = {
             'Authorization': `Basic ${new Buffer(`${this.username}:${this.password}`).toString('base64')}`
         };
 
-        console.log(`${this.baseUrl}/${uri}`, opts);
-        fetch(`${this.baseUrl}/${uri}`, opts)
-            .then(response => {
-                console.log(response.json());
-                return response.json();
-            })
-            .catch(err => {
-                console.log(err);
-                return response.json();
+        return fetch(`${this.baseUrl}/${uri}`, opts)
+            .then(response => response.json())
+            .then(responseJson => {
+                return new Promise((resolve, reject) => {
+                    if (responseJson.data) {
+                        resolve(responseJson);
+                    }
+
+                    reject(responseJson)
+                });
             });
     },
 
     Account: {
         show() {
-            BondAPI.request('account', {
+            return BondAPI.request('account', {
                 method: 'GET',
             });
         },
