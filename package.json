@@ -1,0 +1,13 @@
+{
+    "name": "node-bond-api",
+    "version": "0.0.1",
+    "description": "Node Bond API Wrapper",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/llaski/node-bond-api.git"
+    },
+    "dependencies": {
+        "node-fetch": "^1.6.3"
+    }
+}
