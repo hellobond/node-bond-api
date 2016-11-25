@@ -13,14 +13,20 @@ const BondAPI = {
         this.username = apiKey;
     },
 
-    request(uri, opts) {
-
+    request(uri, opts, params) {
+        const buffer = new Buffer(`${this.username}:${this.password}`).toString('base64');
         opts.headers = {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${new Buffer(`${this.username}:${this.password}`).toString('base64')}`
+            'Authorization': `Basic ${buffer}`
         };
 
-        return fetch(`${this.baseUrl}/${uri}`, opts)
+        let query = '';
+
+        if (params) {
+            query = Object.keys(params).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`).join('&');
+        }
+
+        return fetch(`${this.baseUrl}/${uri}${query}`, opts)
             .then(response => response.json())
             .then(responseJson => {
                 return new Promise((resolve, reject) => {
@@ -40,78 +46,102 @@ const BondAPI = {
             });
         },
 
-        stationery() {
+        Stationery: {
 
-        },
+            list(params) {
+                return BondAPI.request('account/stationery', {
+                    method: 'GET',
+                }, params);
+            },
 
-        handwriting() {
+            show(id) {
+                return BondAPI.request(`account/stationery/${id}`, {
+                    method: 'GET',
+                });
+            },
+        }
 
-        },
+        Handwriting: {
 
-        handwritingById() {
+            list(params) {
+                return BondAPI.request('account/handwriting', {
+                    method: 'GET',
+                }, params);
+            },
 
+            show(id) {
+                return BondAPI.request(`account/handwriting/${id}`, {
+                    method: 'GET',
+                });
+            },
         }
     },
 
     Orders: {
-        list() {
-
+        list(params) {
+            return BondAPI.request('orders', {
+                method: 'GET',
+            }, params);
         },
 
-        show(orderGuid) {
-
-        },
-
-        create() {
-            var that = this,
-                request = {};
-
-            return Config.getValuesPromise(Config.BOND_API_URL, Config.BOND_API_AUTH_NAME).then(function(bondApiAuth, configs) {
-                request = {
-                    method: 'POST',
-                    url: Config.getValue(Config.BOND_API_URL) + '/orders',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': Config.getValue(Config.BOND_API_AUTH_NAME)
-                    }
-                }
-
-                return Parse.Cloud.httpRequest(request);
-            }).then(function(httpResponse) {
-                return Parse.Promise.as(httpResponse);
-            }, function(error) {
-                error.request = request
-                return that.createErrorRecord('createOrderBackOffice', error).then(function() {
-                    return Parse.Promise.error(Utils.isJson(error.text) ? JSON.parse(error.text) : error.text);
-                });
+        show(guid) {
+            return BondAPI.request(`orders/${guid}`, {
+                method: 'GET',
             });
         },
 
-        process(orderGuid) {
-
+        create(data) {
+            return BondAPI.request(`orders`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
         },
 
-        addMessageToOrder(orderGuid) {
-
+        process(guid) {
+            return BondAPI.request(`orders/${guid}/process`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
         },
 
-        listMessagesByOrder(orderGuid) {
+        Messages: {
 
-        },
+            create(orderGuid, data) {
+                return BondAPI.request(`orders/${orderGuid}/messages`, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+            },
 
-        getMessageByOrder(orderGuid, messageGuid) {
+            list(orderGuid, params) {
+                return BondAPI.request(`orders/${orderGuid}/messages`, {
+                    method: 'GET',
+                }, params);
+            },
 
+            show(orderGuid, messageGuid) {
+                return BondAPI.request(`orders/${orderGuid}/messages/${messageGuid}`, {
+                    method: 'GET',
+                });
+            }
         }
+
     },
 
     Message: {
 
-        previewContent() {
-
+        previewContent(data) {
+            return BondAPI.request(`messages/preview/content`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
         },
 
         previewEnvelope() {
-
+            return BondAPI.request(`messages/preview/envelope`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
         }
     }
 };
