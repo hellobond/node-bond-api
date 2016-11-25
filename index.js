@@ -23,7 +23,7 @@ const BondAPI = {
         let query = '';
 
         if (params) {
-            query = Object.keys(params).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`).join('&');
+            query = '?' + Object.keys(params).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`).join('&');
         }
 
         return fetch(`${this.baseUrl}/${uri}${query}`, opts)
@@ -59,18 +59,18 @@ const BondAPI = {
                     method: 'GET',
                 });
             },
-        }
+        },
 
         Handwriting: {
 
             list(params) {
-                return BondAPI.request('account/handwriting', {
+                return BondAPI.request('account/handwriting-styles', {
                     method: 'GET',
                 }, params);
             },
 
             show(id) {
-                return BondAPI.request(`account/handwriting/${id}`, {
+                return BondAPI.request(`account/handwriting-styles/${id}`, {
                     method: 'GET',
                 });
             },
