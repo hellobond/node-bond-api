@@ -90,17 +90,15 @@ const BondAPI = {
             });
         },
 
-        create(data) {
+        create() {
             return BondAPI.request(`orders`, {
-                method: 'POST',
-                body: JSON.stringify(data)
+                method: 'POST'
             });
         },
 
         process(guid) {
             return BondAPI.request(`orders/${guid}/process`, {
-                method: 'POST',
-                body: JSON.stringify(data)
+                method: 'POST'
             });
         },
 
@@ -137,7 +135,7 @@ const BondAPI = {
             });
         },
 
-        previewEnvelope() {
+        previewEnvelope(data) {
             return BondAPI.request(`messages/preview/envelope`, {
                 method: 'POST',
                 body: JSON.stringify(data)
