@@ -9,8 +9,9 @@ const BondAPI = {
     username: '',
     password: '',
 
-    init(apiKey) {
-        this.username = apiKey;
+    init(username, password) {
+        this.username = username;
+        this.password = password;
     },
 
     request(uri, opts, params) {
