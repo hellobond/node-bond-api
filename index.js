@@ -31,7 +31,7 @@ const BondAPI = {
             .then(response => response.json())
             .then(responseJson => {
                 return new Promise((resolve, reject) => {
-                    if (responseJson.data) {
+                    if (responseJson) {
                         resolve(responseJson);
                     }
 
