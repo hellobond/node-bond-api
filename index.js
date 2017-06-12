@@ -9,6 +9,9 @@ const BondAPI = {
     username: '',
     password: '',
 
+    beforeRequestHook(url, opts) {},
+    afterRequestHook(responseJson) {},
+
     init(username, password) {
         this.username = username;
         this.password = password;
@@ -27,9 +30,15 @@ const BondAPI = {
             query = '?' + Object.keys(params).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`).join('&');
         }
 
-        return fetch(`${this.baseUrl}/${uri}${query}`, opts)
+        const url = `${this.baseUrl}/${uri}${query}`;
+
+        this.beforeRequestHook(url, opts);
+
+        return fetch(url, opts)
             .then(response => response.json())
             .then(responseJson => {
+                this.afterRequestHook(responseJson);
+
                 return new Promise((resolve, reject) => {
                     if (responseJson.data) {
                         resolve(responseJson);
