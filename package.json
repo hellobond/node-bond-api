@@ -8,6 +8,7 @@
         "url": "https://github.com/llaski/node-bond-api.git"
     },
     "dependencies": {
-        "node-fetch": "^1.6.3"
+        "node-fetch": "^1.6.3",
+        "utf8": "^2.1.2"
     }
 }

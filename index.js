@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 
 const BondAPI = {
 
+    // baseUrl: 'https://api.bond.co',
     baseUrl: 'https://dev-bbwrapper.bondco.io',
     username: '',
     password: '',
@@ -155,3 +156,25 @@ const BondAPI = {
 };
 
 module.exports = BondAPI;
+
+// echo 'Signature: ' . Utf8::chr(hexdec('E000'));
+// echo 'Emoticon: ' . Utf8::chr(hexdec('E001'));
+
+function hexToDec(hexString) {
+    hexString = (hexString + '').replace(/[^a-f0-9]/gi, '')
+    return parseInt(hexString, 16)
+}
+
+BondAPI.init('wrapper@bond.co', 'Bond2017')
+BondAPI.Message.previewContent({
+    stationery_id: '57f6109e2a9ca00014c41a83',
+    handwriting: {
+        id: '57f60fed2a9ca00014c41a18',
+        size: 14
+    },
+    "content": "This message includes an signature - " + String.fromCharCode(hexToDec('E001'))
+}).then(response => {
+    console.log(response)
+}, errors => {
+    console.error(errors)
+})
