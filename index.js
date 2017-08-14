@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 
 const BondAPI = {
 
-    baseUrl: 'https://dev-bbwrapper.bondco.io',
+    baseUrl: 'https://stg-bbwrapper.bondco.io',
     username: '',
     password: '',
 
