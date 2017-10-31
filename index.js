@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 
 const BondAPI = {
 
-    baseUrl: 'http://api.bond.co/',
+    baseUrl: 'http://api.legacy.bond.co/',
     username: '',
     password: '',
 
